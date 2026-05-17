@@ -1,9 +1,9 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 
 namespace RiverBooks.OrderProcessing.Contracts;
 
-public record CreateOrderCommand(Guid UserId,
+public record CreateOrderMessage(Guid UserId,
                                  Guid ShippingAddressId,
                                  Guid BillingAddressId,
                                  List<OrderItemDetails> OrderItems) :

@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Ardalis.Result;
 using FastEndpoints;
-using Mediator;
+using MediatR;
 using RiverBooks.OrderProcessing.UseCases.Orders.ListForUser;
 using RiverBooks.Users.CartEndpoints;
 
@@ -9,11 +9,11 @@ namespace RiverBooks.OrderProcessing.Endpoints;
 internal class ListOrdersForUser :
   EndpointWithoutRequest<ListOrdersForUserResponse>
 {
-  private readonly IMediator _mediator;
+  private readonly IMediator _MediatR;
 
-  public ListOrdersForUser(IMediator mediator)
+  public ListOrdersForUser(IMediator MediatR)
   {
-    _mediator = mediator;
+    _MediatR = MediatR;
   }
 
   public override void Configure()
@@ -29,7 +29,7 @@ internal class ListOrdersForUser :
 
     var query = new ListOrdersForUserQuery(emailAddress!);
 
-    var result = await _mediator.Send(query, ct);
+    var result = await _MediatR.Send(query, ct);
 
     if (result.Status == ResultStatus.Unauthorized)
     {

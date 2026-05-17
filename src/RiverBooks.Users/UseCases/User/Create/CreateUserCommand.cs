@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 
 namespace RiverBooks.Users.UseCases.User.Create;
 public record CreateUserCommand(string Email, string Password) : IRequest<Result>;

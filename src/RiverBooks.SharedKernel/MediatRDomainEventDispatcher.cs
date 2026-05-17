@@ -1,14 +1,14 @@
-﻿using Mediator;
+﻿using MediatR;
 
 namespace RiverBooks.SharedKernel;
 
 public class MediatRDomainEventDispatcher : IDomainEventDispatcher
 {
-  private readonly IMediator _mediator;
+  private readonly IMediator _MediatR;
 
-  public MediatRDomainEventDispatcher(IMediator mediator)
+  public MediatRDomainEventDispatcher(IMediator MediatR)
   {
-    _mediator = mediator;
+    _MediatR = MediatR;
   }
 
   public async Task DispatchAndClearEvents(IEnumerable<IHaveDomainEvents> entitiesWithEvents)
@@ -19,7 +19,7 @@ public class MediatRDomainEventDispatcher : IDomainEventDispatcher
       entity.ClearDomainEvents();
       foreach (var domainEvent in events)
       {
-        await _mediator.Publish(domainEvent).ConfigureAwait(false);
+        await _MediatR.Publish(domainEvent).ConfigureAwait(false);
       }
     }
   }

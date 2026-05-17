@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using RiverBooks.Users.Domain;
 using RiverBooks.Users.Interfaces;
@@ -12,14 +12,14 @@ public class AddAddressToUserHandler : IRequestHandler<AddAddressToUserCommand, 
   private readonly ILogger<AddAddressToUserHandler> _logger;
 
   public AddAddressToUserHandler(IApplicationUserRepository userRepository,
-    IMediator mediator,
+    IMediator MediatR,
     ILogger<AddAddressToUserHandler> logger)
   {
     _userRepository = userRepository;
     _logger = logger;
   }
 
-  public async ValueTask<Result> Handle(AddAddressToUserCommand request, CancellationToken ct)
+  public async Task<Result> Handle(AddAddressToUserCommand request, CancellationToken ct)
   {
     var user = await _userRepository.GetUserWithAddressesByEmailAsync(request.EmailAddress);
 

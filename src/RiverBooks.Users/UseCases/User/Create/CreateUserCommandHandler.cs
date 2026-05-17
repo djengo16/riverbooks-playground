@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using RiverBooks.Users.Domain;
 
@@ -14,7 +14,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
     _userManager = userManager;
   }
 
-  public async ValueTask<Result> Handle(CreateUserCommand command, 
+  public async Task<Result> Handle(CreateUserCommand command, 
     CancellationToken ct)
   {
     var newUser = new ApplicationUser { Email = command.Email, UserName = command.Email };

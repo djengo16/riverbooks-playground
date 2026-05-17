@@ -1,18 +1,18 @@
 ﻿using System.Security.Claims;
 using Ardalis.Result;
 using FastEndpoints;
-using Mediator;
+using MediatR;
 using RiverBooks.Users.UseCases.User.ListAddresses;
 
 namespace RiverBooks.Users.UserEndpoints;
 internal class ListAddresses :
   EndpointWithoutRequest<AddressListResponse>
 {
-  private readonly IMediator _mediator;
+  private readonly IMediator _MediatR;
 
-  public ListAddresses(IMediator mediator)
+  public ListAddresses(IMediator MediatR)
   {
-    _mediator = mediator;
+    _MediatR = MediatR;
   }
 
   public override void Configure()
@@ -28,7 +28,7 @@ internal class ListAddresses :
 
     var query = new ListAddressesQuery(emailAddress!);
 
-    var result = await _mediator.Send(query, ct);
+    var result = await _MediatR.Send(query, ct);
 
     if (result.Status == ResultStatus.Unauthorized)
     {

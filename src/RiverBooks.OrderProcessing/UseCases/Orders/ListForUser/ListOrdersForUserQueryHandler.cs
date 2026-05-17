@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using RiverBooks.OrderProcessing.Interfaces;
 using RiverBooks.Users.UseCases;
 
@@ -14,7 +14,7 @@ public class ListOrdersForUserQueryHandler : IRequestHandler<ListOrdersForUserQu
     _orderRepository = orderRepository;
   }
 
-  public async ValueTask<Result<List<OrderSummary>>> Handle(ListOrdersForUserQuery request, CancellationToken cancellationToken)
+  public async Task<Result<List<OrderSummary>>> Handle(ListOrdersForUserQuery request, CancellationToken cancellationToken)
   {
     // look up UserId for EmailAddress
 

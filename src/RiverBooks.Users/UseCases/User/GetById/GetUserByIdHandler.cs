@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using RiverBooks.Users.Interfaces;
 
 namespace RiverBooks.Users.UseCases.User.GetById;
@@ -13,7 +13,7 @@ public class GetUserByIdHandler : IRequestHandler<GetUserByIdQuery, Result<UserD
     _userRepository = userRepository;
   }
 
-  public async ValueTask<Result<UserDTO>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+  public async Task<Result<UserDTO>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
   {
     var user = await _userRepository.GetUserByIdAsync(request.UserId);
 

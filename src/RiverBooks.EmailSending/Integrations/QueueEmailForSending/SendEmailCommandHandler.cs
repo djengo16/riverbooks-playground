@@ -1,9 +1,10 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using MongoDB.Driver;
 using RiverBooks.EmailSending.Contracts;
 
 namespace RiverBooks.EmailSending.Integrations.QueueEmailForSending;
+
 public class SendEmailCommandHandler : IRequestHandler<SendEmailCommand, Result<Guid>>
 {
   private readonly IMongoCollection<EmailOutboxEntity> _emailEntityCollection;
@@ -13,7 +14,7 @@ public class SendEmailCommandHandler : IRequestHandler<SendEmailCommand, Result<
     _emailEntityCollection = emailEntityCollection;
   }
 
-  public async ValueTask<Result<Guid>> Handle(SendEmailCommand request, CancellationToken ct)
+  public async Task<Result<Guid>> Handle(SendEmailCommand request, CancellationToken ct)
   {
     // we're just storing in the outbox and returning the generated id
     var id = Guid.NewGuid();
@@ -26,6 +27,7 @@ public class SendEmailCommandHandler : IRequestHandler<SendEmailCommand, Result<
       Subject = request.Subject,
       Body = request.Body
     };
+
     await _emailEntityCollection.InsertOneAsync(emailEntity);
 
     return id;

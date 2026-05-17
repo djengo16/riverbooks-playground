@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using RiverBooks.Users.Contracts;
 using RiverBooks.Users.UseCases.User.GetById;
 
@@ -8,19 +8,19 @@ namespace RiverBooks.Users.Integrations;
 public class UserDetailsByIdQueryHandler : IRequestHandler<UserDetailsByIdQuery,
                                                         Result<UserDetailsResponse>>
 {
-  private readonly IMediator _mediator;
+  private readonly IMediator _MediatR;
 
-  public UserDetailsByIdQueryHandler(IMediator mediator)
+  public UserDetailsByIdQueryHandler(IMediator MediatR)
   {
-    _mediator = mediator;
+    _MediatR = MediatR;
   }
 
-  public async ValueTask<Result<UserDetailsResponse>> Handle(UserDetailsByIdQuery request, 
+  public async Task<Result<UserDetailsResponse>> Handle(UserDetailsByIdQuery request, 
     CancellationToken ct)
   {
     var query = new GetUserByIdQuery(request.UserId);
 
-    var result = await _mediator.Send(query);
+    var result = await _MediatR.Send(query);
 
     if (result.Status != ResultStatus.Ok) { return Result.NotFound(); }
 

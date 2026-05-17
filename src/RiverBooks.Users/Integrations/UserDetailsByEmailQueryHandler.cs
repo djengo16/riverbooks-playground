@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using RiverBooks.Users.Contracts;
 using RiverBooks.Users.UseCases.User.GetByEmail;
 
@@ -8,18 +8,18 @@ namespace RiverBooks.Users.Integrations;
 public class UserDetailsByEmailQueryHandler : IRequestHandler<UserDetailsByEmailQuery, 
                                                         Result<UserDetailsResponse>>
 {
-  private readonly IMediator _mediator;
+  private readonly IMediator _MediatR;
 
-  public UserDetailsByEmailQueryHandler(IMediator mediator)
+  public UserDetailsByEmailQueryHandler(IMediator MediatR)
   {
-    _mediator = mediator;
+    _MediatR = MediatR;
   }
 
-  public async ValueTask<Result<UserDetailsResponse>> Handle(UserDetailsByEmailQuery request, CancellationToken cancellationToken)
+  public async Task<Result<UserDetailsResponse>> Handle(UserDetailsByEmailQuery request, CancellationToken cancellationToken)
   {
     var query = new GetUserByEmailQuery(request.EmailAddress);
 
-    var result = await _mediator.Send(query);
+    var result = await _MediatR.Send(query);
 
     if(result.Status != ResultStatus.Ok) { return Result.NotFound(); }
 

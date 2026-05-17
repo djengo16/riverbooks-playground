@@ -1,5 +1,5 @@
 ﻿using System;
-using Mediator;
+using MediatR;
 
 namespace RiverBooks.SharedKernel;
 

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using FluentValidation;
-using Mediator;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RiverBooks.SharedKernel;

@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using Ardalis.Result;
 using FastEndpoints;
-using Mediator;
+using MediatR;
 using RiverBooks.Users.UseCases.Cart.ListItems;
 
 namespace RiverBooks.Users.CartEndpoints;
@@ -9,11 +9,11 @@ namespace RiverBooks.Users.CartEndpoints;
 internal class ListCartItems :
   EndpointWithoutRequest<CartResponse>
 {
-  private readonly IMediator _mediator;
+  private readonly IMediator _MediatR;
 
-  public ListCartItems(IMediator mediator)
+  public ListCartItems(IMediator MediatR)
   {
-    _mediator = mediator;
+    _MediatR = MediatR;
   }
 
   public override void Configure()
@@ -29,7 +29,7 @@ internal class ListCartItems :
 
     var query = new ListCartItemsQuery(emailAddress!);
 
-    var result = await _mediator.Send(query, ct);
+    var result = await _MediatR.Send(query, ct);
 
     if (result.Status == ResultStatus.Unauthorized)
     {

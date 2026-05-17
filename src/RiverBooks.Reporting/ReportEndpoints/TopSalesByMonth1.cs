@@ -15,7 +15,8 @@ internal class TopSalesByMonth1 :
   public override void Configure()
   {
     Get("/topsales");
-    AllowAnonymous(); // TODO: lock down
+    Claims("EmailAddress");
+    // AllowAnonymous(); // TOODO: lock down DONE
   }
 
   public override async Task HandleAsync(

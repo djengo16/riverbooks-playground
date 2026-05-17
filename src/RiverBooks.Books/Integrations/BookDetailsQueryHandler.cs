@@ -1,10 +1,11 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using RiverBooks.Books.Contracts;
 
 namespace RiverBooks.Books.Integrations;
 
-public class BookDetailsQueryHandler : IRequestHandler<BookDetailsQuery, Result<BookDetailsResponse>>
+public class BookDetailsQueryHandler
+    : IRequestHandler<BookDetailsQuery, Result<BookDetailsResponse>>
 {
   private readonly IBookService _bookService;
 
@@ -12,13 +13,23 @@ public class BookDetailsQueryHandler : IRequestHandler<BookDetailsQuery, Result<
   {
     _bookService = bookService;
   }
-  public async ValueTask<Result<BookDetailsResponse>> Handle(BookDetailsQuery request, CancellationToken cancellationToken)
+
+  public async Task<Result<BookDetailsResponse>> Handle(
+      BookDetailsQuery request,
+      CancellationToken cancellationToken)
   {
     var book = await _bookService.GetBookByIdAsync(request.BookId);
 
-    if (book is null) { return Result.NotFound(); }
+    if (book is null)
+    {
+      return Result.NotFound();
+    }
 
-    var response = new BookDetailsResponse(book.Id, book.Title, book.Author, book.Price);
+    var response = new BookDetailsResponse(
+        book.Id,
+        book.Title,
+        book.Author,
+        book.Price);
 
     return response;
   }

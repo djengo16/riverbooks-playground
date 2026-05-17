@@ -1,4 +1,4 @@
-﻿using Mediator;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using RiverBooks.Users.Contracts;
 using RiverBooks.Users.Domain;
@@ -7,18 +7,18 @@ namespace RiverBooks.Users.Integrations;
 
 public class UserAddressIntegrationEventDispatcherHandler : INotificationHandler<AddressAddedEvent>
 {
-  private readonly IMediator _mediator;
+  private readonly IMediator _MediatR;
   private readonly ILogger<UserAddressIntegrationEventDispatcherHandler> _logger;
 
   public UserAddressIntegrationEventDispatcherHandler(
-    IMediator mediator,
+    IMediator MediatR,
     ILogger<UserAddressIntegrationEventDispatcherHandler> logger)
   {
-    _mediator = mediator;
+    _MediatR = MediatR;
     _logger = logger;
   }
 
-  public async ValueTask Handle(AddressAddedEvent notification, CancellationToken cancellationToken)
+  public async Task Handle(AddressAddedEvent notification, CancellationToken cancellationToken)
   {
     Guid userId = Guid.Parse(notification.NewAddress.UserId);
     
@@ -31,7 +31,7 @@ public class UserAddressIntegrationEventDispatcherHandler : INotificationHandler
       notification.NewAddress.StreetAddress.PostalCode,
       notification.NewAddress.StreetAddress.Country);
 
-    await _mediator!.Publish(new NewUserAddressAddedIntegrationEvent(addressDetails));
+    await _MediatR!.Publish(new NewUserAddressAddedIntegrationEvent(addressDetails));
 
     _logger.LogInformation("[DE Handler]New address integration event sent for {user}: {address}",
       notification.NewAddress.UserId,

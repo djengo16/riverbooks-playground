@@ -1,25 +1,25 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MassTransit;
+using MediatR;
 using RiverBooks.OrderProcessing.Contracts;
 using RiverBooks.OrderProcessing.Domain;
 using RiverBooks.OrderProcessing.Interfaces;
 
 namespace RiverBooks.OrderProcessing.Integrations;
 
-public class CreateOrderCommandHandler : 
-  IRequestHandler<CreateOrderCommand, Result<OrderDetailsResponse>>
+public class CreateOrderConsumer : IConsumer<CreateOrderMessage>
 {
   private readonly IOrderRepository _orderRepository;
   private readonly IOrderAddressCache _addressCache;
 
-  public CreateOrderCommandHandler(IOrderRepository orderRepository,
+  public CreateOrderConsumer(IOrderRepository orderRepository,
     IOrderAddressCache addressCache)
   {
     _orderRepository = orderRepository;
     _addressCache = addressCache;
   }
 
-  public async ValueTask<Result<OrderDetailsResponse>> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
+  public async Task Consume(ConsumeContext<CreateOrderMessage> context)
   {
     // need shipping and billing address info - how can we get it?
     // Option 1: Pass it into the command with everything else
@@ -37,6 +37,9 @@ public class CreateOrderCommandHandler :
 
     // need to look up user addresses in materialized view
     // IMPORTANT: addresses are immutable - if we have the id we know we have the correct address
+
+    var command = context.Message;
+
     var billingAddress = await _addressCache.GetByIdAsync(command.BillingAddressId);
     var shippingAddress = await _addressCache.GetByIdAsync(command.ShippingAddressId);
     // TODO: Implement read-through and retry logic via decorator(s)
@@ -59,7 +62,5 @@ public class CreateOrderCommandHandler :
 
     await _orderRepository.AddAsync(order);
     await _orderRepository.SaveChangesAsync();
-
-    return new OrderDetailsResponse(order.Id);
   }
 }

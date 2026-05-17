@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 
 namespace RiverBooks.EmailSending.Contracts;
 

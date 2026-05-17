@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using RiverBooks.Users.CartEndpoints;
 
 namespace RiverBooks.Users.UseCases.Cart.ListItems;

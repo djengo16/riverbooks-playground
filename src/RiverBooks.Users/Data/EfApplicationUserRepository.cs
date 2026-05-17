@@ -22,6 +22,7 @@ internal class EfApplicationUserRepository : IApplicationUserRepository
   public Task<ApplicationUser> GetUserByIdAsync(Guid userId)
   {
     return _dbContext.ApplicationUsers
+      .Include(user => user.CartItems)
       .SingleAsync(u => u.Id == userId.ToString());
   }
 

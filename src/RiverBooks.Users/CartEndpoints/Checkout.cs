@@ -1,10 +1,11 @@
 ﻿using System.Security.Claims;
 using Ardalis.Result;
 using FastEndpoints;
-using Mediator;
+using MediatR;
 using RiverBooks.Users.UseCases.Cart.AddItem;
 
 namespace RiverBooks.Users.CartEndpoints;
+
 internal class Checkout : Endpoint<CheckoutRequest, CheckoutResponse>
 {
   private readonly IMediator _mediator;
@@ -20,7 +21,8 @@ internal class Checkout : Endpoint<CheckoutRequest, CheckoutResponse>
     Claims("EmailAddress");
   }
 
-  public override async Task HandleAsync(CheckoutRequest request, 
+  public override async Task HandleAsync(
+    CheckoutRequest request,
     CancellationToken ct = default)
   {
     var emailAddress = User.FindFirstValue("EmailAddress");
@@ -29,7 +31,7 @@ internal class Checkout : Endpoint<CheckoutRequest, CheckoutResponse>
                                           request.ShippingAddressId,
                                           request.BillingAddressId);
 
-    var result = await _mediator.Send(command);
+    var result = await _mediator.Send(command, ct);
 
     if (result.Status == ResultStatus.Unauthorized)
     {
@@ -40,5 +42,4 @@ internal class Checkout : Endpoint<CheckoutRequest, CheckoutResponse>
       await HttpContext.Response.SendOkAsync();
     }
   }
-
 }

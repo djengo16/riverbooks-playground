@@ -1,5 +1,5 @@
 ﻿using Ardalis.Result;
-using Mediator;
+using MediatR;
 using RiverBooks.Users.CartEndpoints;
 using RiverBooks.Users.Interfaces;
 
@@ -14,7 +14,7 @@ public class ListCartItemsQueryHandler : IRequestHandler<ListCartItemsQuery, Res
     _userRepository = userRepository;
   }
 
-  public async ValueTask<Result<List<CartItemDto>>> Handle(ListCartItemsQuery request, CancellationToken cancellationToken)
+  public async Task<Result<List<CartItemDto>>> Handle(ListCartItemsQuery request, CancellationToken cancellationToken)
   {
     var user = await _userRepository.GetUserWithCartByEmailAsync(request.EmailAddress);
 

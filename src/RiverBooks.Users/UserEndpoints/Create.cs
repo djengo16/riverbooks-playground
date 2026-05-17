@@ -1,6 +1,6 @@
 ﻿using Ardalis.Result.AspNetCore;
 using FastEndpoints;
-using Mediator;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using RiverBooks.Users.CartEndpoints;
 using RiverBooks.Users.Domain;
@@ -12,13 +12,13 @@ namespace RiverBooks.Users.UserEndpoints;
 internal sealed class Create : Endpoint<CreateUserRequest>
 {
   private readonly UserManager<ApplicationUser> _userManager;
-  private readonly IMediator _mediator;
+  private readonly IMediator _MediatR;
 
   public Create(UserManager<ApplicationUser> userManager,
-    IMediator mediator)
+    IMediator MediatR)
   {
     _userManager = userManager;
-    _mediator = mediator;
+    _MediatR = MediatR;
   }
 
   public override void Configure()
@@ -32,7 +32,7 @@ internal sealed class Create : Endpoint<CreateUserRequest>
   {
     var command = new CreateUserCommand(req.Email, req.Password);
 
-    var result = await _mediator.Send(command);
+    var result = await _MediatR.Send(command);
 
     if (!result.IsSuccess)
     {
