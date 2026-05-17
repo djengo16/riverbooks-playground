@@ -24,8 +24,8 @@ public static class UsersModuleServicesExtensions
     services.AddIdentityCore<ApplicationUser>()
             .AddEntityFrameworkStores<UsersDbContext>();
 
-    services.AddScoped<IApplicationUserRepository, EfApplicationUserRepository>();
-    services.AddScoped<IReadOnlyUserStreetAddressRepository, EfUserStreetAddressRepository>();
+    services.TryAddScoped<IApplicationUserRepository, EfApplicationUserRepository>();
+    services.TryAddScoped<IReadOnlyUserStreetAddressRepository, EfUserStreetAddressRepository>();
 
     // if using MediatR in this module, add any assemblies that contain handlers to the list
     mediatRAssemblies.Add(typeof(UsersModuleServicesExtensions).Assembly);

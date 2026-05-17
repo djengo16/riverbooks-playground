@@ -2,7 +2,7 @@
 
 /// <summary>
 /// Basic details of the order
-/// TOODO: Include address info for geographic specific reports to use
+/// TODO: Include address info for geographic specific reports to use
 /// DONE: Extended with address details that will be populated
 /// </summary>
  

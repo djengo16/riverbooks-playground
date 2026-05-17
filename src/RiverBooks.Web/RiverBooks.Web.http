@@ -84,7 +84,7 @@ Content-Type: application/json
 
 {
   "bookId": "17c61e41-3953-42cd-8f88-d3f698869b35",
-  "quantity": 2
+  "quantity": 1
 }
 
 ###

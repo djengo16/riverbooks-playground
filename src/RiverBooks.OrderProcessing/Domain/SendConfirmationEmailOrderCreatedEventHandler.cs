@@ -25,8 +25,8 @@ public class SendConfirmationEmailOrderCreatedEventHandler : INotificationHandle
 
     if (!result.IsSuccess)
     {
-      // TOODO: Add logging
-      // DONE
+      // TODO: Add logging
+      // DONE.
 
       _logger.LogWarning($"User details could not be found for user with ID: {userByIdQuery.UserId}");
       return;
@@ -44,7 +44,7 @@ public class SendConfirmationEmailOrderCreatedEventHandler : INotificationHandle
 
     Guid emailId = await _mediator.Send(command);
 
-    // TOODO: store emailId
-    // DONE: It was already stored, we use it in an outbox pattern way, store the id in mongo
+    // TODO: store emailId
+    // DONE. It was already stored, we use it in an outbox pattern way, storing the id in mongo
   }
 }

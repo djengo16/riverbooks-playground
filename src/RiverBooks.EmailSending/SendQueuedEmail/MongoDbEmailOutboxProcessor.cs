@@ -32,8 +32,8 @@ public class MongoDbEmailOutboxProcessor(
       var unsentEmailEntity = await _emailEntityCollection
       .Find(filter).FirstOrDefaultAsync();
 
-      // TOODO: Change this to a while loop so it processes more than 1 each time
-      // DONE: Instead I use for loop with limit to prevent endless loop
+      // TODO: Change this to a while loop so it processes more than 1 each time
+      // DONE. Instead I use for loop with limit to prevent endless loop
       if (unsentEmailEntity != null)
       {
         try

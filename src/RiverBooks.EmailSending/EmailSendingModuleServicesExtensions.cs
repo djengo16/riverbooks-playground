@@ -25,8 +25,8 @@ public static class EmailSendingModuleServicesExtensions
       .ValidateOnStart();
 
     // configure module services
-    services.AddSingleton<IOutboxProcessor, MongoDbEmailOutboxProcessor>();
-    services.AddTransient<ISendEmail, MimeKitEmailSender>();
+    services.TryAddSingleton<IOutboxProcessor, MongoDbEmailOutboxProcessor>();
+    services.TryAddTransient<ISendEmail, MimeKitEmailSender>();
 
     // if using MediatR in this module, add any assemblies that contain handlers to the list
     mediatRAssemblies.Add(typeof(EmailSendingModuleServicesExtensions).Assembly);
@@ -41,14 +41,14 @@ public static class EmailSendingModuleServicesExtensions
   public static IServiceCollection AddMongoDB(this IServiceCollection services, IConfiguration configuration)
   {
     // Register the MongoDB client as a singleton
-    services.AddSingleton<IMongoClient>(serviceProvider =>
+    services.TryAddSingleton<IMongoClient>(serviceProvider =>
     {
       var settings = configuration.GetSection("MongoDB").Get<MongoDBSettings>();
       return new MongoClient(settings!.ConnectionString);
     });
 
     // Register the MongoDB database as a singleton
-    services.AddSingleton(serviceProvider =>
+    services.TryAddSingleton(serviceProvider =>
     {
       var settings = configuration.GetSection("MongoDB").Get<MongoDBSettings>();
       var client = serviceProvider.GetService<IMongoClient>();
@@ -57,7 +57,7 @@ public static class EmailSendingModuleServicesExtensions
 
     //// Optionally, register specific collections here as scoped or singleton services
     //// Example for a 'EmailOutboxEntity' collection
-    services.AddTransient(serviceProvider =>
+    services.TryAddTransient(serviceProvider =>
     {
       var database = serviceProvider.GetService<IMongoDatabase>();
       return database!.GetCollection<EmailOutboxEntity>("EmailOutboxEntityCollection");
