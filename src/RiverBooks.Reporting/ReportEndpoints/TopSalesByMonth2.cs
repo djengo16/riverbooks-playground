@@ -16,7 +16,7 @@ internal class TopSalesByMonth2 :
   {
     Get("/topsales2");
     Claims("EmailAddress");
-    // AllowAnonymous(); // TOODO: lock down DONE
+    // AllowAnonymous(); // TOODO: lock down DONE.
   }
 
   public override async Task HandleAsync(

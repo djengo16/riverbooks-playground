@@ -17,8 +17,8 @@ public static class BookModuleServiceExtensions
     string? connectionString = config.GetConnectionString("BooksConnectionString");
     services.AddDbContext<BookDbContext>(config =>
       config.UseSqlServer(connectionString));
-    services.AddScoped<IBookRepository, EfBookRepository>();
-    services.AddScoped<IBookService, BookService>();
+    services.TryAddScoped<IBookRepository, EfBookRepository>();
+    services.TryAddScoped<IBookService, BookService>();
 
     // if using MediatR in this module, add any assemblies that contain handlers to the list
     mediatRAssemblies.Add(typeof(BookModuleServiceExtensions).Assembly);

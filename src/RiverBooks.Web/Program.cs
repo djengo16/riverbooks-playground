@@ -3,6 +3,7 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using MassTransit;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -63,7 +64,7 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddMediatRLoggingBehavior();
 builder.Services.AddMediatRFluentValidationBehavior();
 builder.Services.AddValidatorsFromAssemblyContaining<AddItemToCartCommandValidator>();
-builder.Services.AddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>(); // domain events
+builder.Services.TryAddScoped<IDomainEventDispatcher, MediatRDomainEventDispatcher>(); // domain events
 
 builder.Services.AddMassTransit(x =>
 {
@@ -80,7 +81,7 @@ builder.Services.AddMassTransit(x =>
 
 // TOODO: Add a check that certain services are only registered once to avoid multiple modules 
 // stepping on one another's service wirings
-// DONE: Added "TryAdd" which ensures service is registered only if it already hasn't
+// DONE: Added "TryAdd" which ensures service is registered only if it already wasn't
 var app = builder.Build();
 
 app.UseHttpLogging();

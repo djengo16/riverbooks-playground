@@ -2,6 +2,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace RiverBooks.SharedKernel;
 
@@ -9,7 +10,7 @@ public static class BehaviorExtensions
 {
   public static IServiceCollection AddMediatRLoggingBehavior(this IServiceCollection services)
   {
-    services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+    services.TryAddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
     return services;
   }
 
@@ -20,7 +21,7 @@ public static class BehaviorExtensions
   /// <returns></returns>
   public static IServiceCollection AddMediatRFluentValidationBehavior(this IServiceCollection services)
   {
-    services.AddScoped(typeof(IPipelineBehavior<,>), typeof(FluentValidationBehavior<,>));
+    services.TryAddScoped(typeof(IPipelineBehavior<,>), typeof(FluentValidationBehavior<,>));
 
     return services;
   }
@@ -43,7 +44,7 @@ public static class BehaviorExtensions
 
       foreach (var implementedInterface in implementedInterfaces)
       {
-        services.AddTransient(implementedInterface, validatorType);
+        services.TryAddTransient(implementedInterface, validatorType);
       }
     }
 

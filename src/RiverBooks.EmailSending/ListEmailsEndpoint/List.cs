@@ -16,7 +16,7 @@ internal class List :
   {
     Get("/emails");
     Claims("EmailAddress");
-    // AllowAnonymous(); // TOODO: Lock this down, DONE
+    // AllowAnonymous(); // TODO: Lock this down, DONE
   }
 
   public override async Task HandleAsync(ListEmailsRequest listEmailsRequest,
@@ -25,8 +25,8 @@ internal class List :
     var page = listEmailsRequest.Page;
     var pageSize = listEmailsRequest.PageSize;
 
-    // TOODO: Implement paging
-    // DONE
+    // TODO: Implement paging
+    // DONE.
     var filter = Builders<EmailOutboxEntity>.Filter.Empty;
     var emailEntities = await _emailEntityCollection
       .Find(filter)
@@ -38,7 +38,7 @@ internal class List :
     var response = new ListEmailsResponse()
     {
       Count = emailEntities.Count,
-      Emails = emailEntities // TOODO: Use a separate DTO, DONE
+      Emails = emailEntities // TODO: Use a separate DTO, DONE.
     };
 
     Response = response;

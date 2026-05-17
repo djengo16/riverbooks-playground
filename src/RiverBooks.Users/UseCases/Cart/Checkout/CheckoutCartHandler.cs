@@ -43,12 +43,12 @@ public class CheckoutCartHandler : IRequestHandler<CheckoutCartCommand, Result<G
       request.billingAddressId,
       items);
 
-    // TOODO: Consider replacing with a message-based approach for perf reasons
+    // TODO: Consider replacing with a message-based approach for perf reasons
     // var result = await _mediator.Send(createOrderMessage); // synchronous
 
-    // DONE: Instead of mediatr now we use message brocker, and to clear the cart the order created integration event is raised from PublishCreatedOrderIntegrationEventHandler
+    // DONE. Instead of mediator now we use message brocker, and to clear the cart the order created integration event is raised from PublishCreatedOrderIntegrationEventHandler
     // and consumed from OrderCreatedIntegrationEventConsumer where we clear the cart
-    // this is done to achieve the full async flow because previously we got response there and then cleared the card
+    // this is done to achieve the full async flow because previously we got response in this handler and then cleared the card immediatelly
 
     await _publishEndpoint.Publish(createOrderMessage, cancellationToken);
 
@@ -63,9 +63,9 @@ public class CheckoutCartHandler : IRequestHandler<CheckoutCartCommand, Result<G
     //await _userRepository.SaveChangesAsync();
 
     // send email to customer
-    // TOODO: do this in an event handler (Currently this handler is doing two things, creating order and sending email,
+    // TODO: do this in an event handler (Currently this handler is doing two things, creating order and sending email,
     // Imagine if later you decide to send SMS, publish analytics, update loyality points, notify admins and more.
-    // DONE: it was already implemented - SendConfirmationEmailOrderCreatedEventHandler - handles OrderCreatedEvent
+    // DONE. it was already implemented - SendConfirmationEmailOrderCreatedEventHandler - handles OrderCreatedEvent
 
     //var command = new SendEmailCommand()
     //{

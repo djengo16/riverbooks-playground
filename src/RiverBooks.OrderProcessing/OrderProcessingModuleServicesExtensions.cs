@@ -22,11 +22,11 @@ public static class OrderProcessingModuleServicesExtensions
     services.AddDbContext<OrderProcessingDbContext>(config =>
       config.UseSqlServer(connectionString));
 
-    services.AddScoped<IOrderRepository, EfOrderRepository>();
-    services.AddScoped<RedisOrderAddressCache>();
-    services.AddScoped<IOrderAddressCache, ReadThroughOrderAddressCache>();
+    services.TryAddScoped<IOrderRepository, EfOrderRepository>();
+    services.TryAddScoped<RedisOrderAddressCache>();
+    services.TryAddScoped<IOrderAddressCache, ReadThroughOrderAddressCache>();
 
-    services.AddSingleton<IConnectionMultiplexer>(sp =>
+    services.TryAddSingleton<IConnectionMultiplexer>(sp =>
     {
       return ConnectionMultiplexer.Connect(config.GetSection("Redis").GetValue<string>("ConnectionString"));
     });

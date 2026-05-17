@@ -34,7 +34,9 @@ public class NewOrderCreatedIngestionHandler : INotificationHandler<OrderCreated
     foreach (var item in orderItems)
     {
       // look up book details to get author and title
-      // TODO: Implement Materialized View or other cache
+      // TOODO: Implement Materialized View or other cache
+      // DONE: Added cache option for books via read-through class that pulls the book from DB if doesn't exist in the cache
+      // Also added domain & integration events when new book is created & updated so we can upsert it in the cache.
       //var bookDetailsQuery = new BookDetailsQuery(item.BookId);
 
       var result = await _bookCache.GetByIdAsync(item.BookId);

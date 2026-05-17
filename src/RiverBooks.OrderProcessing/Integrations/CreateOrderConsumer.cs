@@ -42,7 +42,6 @@ public class CreateOrderConsumer : IConsumer<CreateOrderMessage>
 
     var billingAddress = await _addressCache.GetByIdAsync(command.BillingAddressId);
     var shippingAddress = await _addressCache.GetByIdAsync(command.ShippingAddressId);
-    // TODO: Implement read-through and retry logic via decorator(s)
 
     // no need to look up book details; description on items will work
 
