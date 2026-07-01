@@ -13,6 +13,10 @@
     <Project Path="RiverBooks.OrderProcessing/RiverBooks.OrderProcessing.csproj" />
     <Project Path="RiverBooks.OrderProcessingTests/RiverBooks.OrderProcessingTests.csproj" />
   </Folder>
+  <Folder Name="/PaymentProcessing Module/">
+    <Project Path="RiverBooks.PaymentProcessing.Contracts/RiverBooks.PaymentProcessing.Contracts.csproj" Id="f8642cca-d30a-48a8-8f9d-e4a37dbe3aab" />
+    <Project Path="RiverBooks.PaymentProcessing/RiverBooks.PaymentProcessing.csproj" Id="11d1cb74-54b4-4f7e-86df-18d61b16e241" />
+  </Folder>
   <Folder Name="/Reporting Module/">
     <Project Path="RiverBooks.Reporting/RiverBooks.Reporting.csproj" />
   </Folder>

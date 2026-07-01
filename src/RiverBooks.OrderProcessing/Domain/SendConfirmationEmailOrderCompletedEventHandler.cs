@@ -5,18 +5,18 @@ using RiverBooks.Users.Contracts;
 
 namespace RiverBooks.OrderProcessing.Domain;
 
-public class SendConfirmationEmailOrderCreatedEventHandler : INotificationHandler<OrderCreatedEvent>
+public class SendConfirmationEmailOrderCompletedEventHandler : INotificationHandler<OrderCompletedEvent>
 {
   private readonly IMediator _mediator;
   private readonly ILogger _logger;
 
-  public SendConfirmationEmailOrderCreatedEventHandler(IMediator mediator, ILogger<SendConfirmationEmailOrderCreatedEventHandler> logger)
+  public SendConfirmationEmailOrderCompletedEventHandler(IMediator mediator, ILogger<SendConfirmationEmailOrderCompletedEventHandler> logger)
   {
     _mediator = mediator;
     _logger = logger;
   }
 
-  public async Task Handle(OrderCreatedEvent notification, CancellationToken ct)
+  public async Task Handle(OrderCompletedEvent notification, CancellationToken ct)
   {
     // get user email from id
     var userByIdQuery = new UserDetailsByIdQuery(notification.Order.UserId);

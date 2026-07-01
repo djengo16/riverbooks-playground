@@ -1,9 +1,8 @@
-﻿using Ardalis.Result;
-using MassTransit;
-using MediatR;
+﻿using MassTransit;
 using RiverBooks.OrderProcessing.Contracts;
 using RiverBooks.OrderProcessing.Domain;
 using RiverBooks.OrderProcessing.Interfaces;
+using RiverBooks.PaymentProcessing.Contracts;
 
 namespace RiverBooks.OrderProcessing.Integrations;
 
@@ -11,12 +10,15 @@ public class CreateOrderConsumer : IConsumer<CreateOrderMessage>
 {
   private readonly IOrderRepository _orderRepository;
   private readonly IOrderAddressCache _addressCache;
+  private readonly IPublishEndpoint _publishEndpoint;
 
   public CreateOrderConsumer(IOrderRepository orderRepository,
-    IOrderAddressCache addressCache)
+    IOrderAddressCache addressCache,
+    IPublishEndpoint publishEndpoint)
   {
     _orderRepository = orderRepository;
     _addressCache = addressCache;
+    _publishEndpoint = publishEndpoint;
   }
 
   public async Task Consume(ConsumeContext<CreateOrderMessage> context)
@@ -47,6 +49,7 @@ public class CreateOrderConsumer : IConsumer<CreateOrderMessage>
 
     // business rule: we create the order exactly as the cart shows (using its price, description, etc.)
     var orderItems = new List<OrderItem>();
+
     foreach (var item in command.OrderItems)
     {
       orderItems.Add(new OrderItem(item.BookId, item.Quantity, item.UnitPrice, item.Description));
@@ -54,12 +57,15 @@ public class CreateOrderConsumer : IConsumer<CreateOrderMessage>
 
     // need to create order - use OrderFactory
 
-    var order = Order.Factory.Create(command.UserId,
-                                     billingAddress.Value.Address,
-                                     shippingAddress.Value.Address,
-                                     orderItems);
+    var order = Order.Factory.Create(command.OrderId, command.UserId, billingAddress.Value.Address, shippingAddress.Value.Address, orderItems);
 
     await _orderRepository.AddAsync(order);
     await _orderRepository.SaveChangesAsync();
+
+    var totalAmount = order.OrderItems.Sum(item => item.Quantity * item.UnitPrice);
+
+    var paymentRequestedMessage = new PaymentRequestedMessage(order.Id, totalAmount, command.PaymentMethodToken);
+
+    await _publishEndpoint.Publish(paymentRequestedMessage);
   }
 }

@@ -18,6 +18,13 @@ internal class EfOrderRepository : IOrderRepository
     await _dbContext.Orders.AddAsync(order);
   }
 
+  public async Task<Order> GetAsync(Guid id)
+  {
+    return await _dbContext.Orders
+      .Include(o => o.OrderItems)
+      .FirstAsync(o => o.Id == id);
+  }
+
   public async Task<List<Order>> ListAsync()
   {
     return await _dbContext.Orders

@@ -10,15 +10,11 @@ namespace RiverBooks.Users.UseCases.Cart.Checkout;
 public class CheckoutCartHandler : IRequestHandler<CheckoutCartCommand, Result<Guid>>
 {
   private readonly IApplicationUserRepository _userRepository;
-
   private readonly IPublishEndpoint _publishEndpoint;
 
-  public CheckoutCartHandler(IApplicationUserRepository userRepository,
-   // IMediator mediator,
-    IPublishEndpoint publishEndpoint)
+  public CheckoutCartHandler(IApplicationUserRepository userRepository, IPublishEndpoint publishEndpoint)
   {
     _userRepository = userRepository;
-    //_mediator = mediator;
     _publishEndpoint = publishEndpoint;
   }
 
@@ -32,50 +28,32 @@ public class CheckoutCartHandler : IRequestHandler<CheckoutCartCommand, Result<G
     }
 
     var items = user.CartItems.Select(item =>
-      new OrderItemDetails(item.BookId,
-                           item.Quantity,
-                           item.UnitPrice,
-                           item.Description))
+      new OrderItemDetails(
+        item.BookId,
+        item.Quantity,
+        item.UnitPrice,
+        item.Description))
       .ToList();
 
-    var createOrderMessage = new CreateOrderMessage(Guid.Parse(user.Id),
-      request.shippingAddressId,
-      request.billingAddressId,
-      items);
+    var orderId = Guid.NewGuid();
 
-    // TODO: Consider replacing with a message-based approach for perf reasons
-    // var result = await _mediator.Send(createOrderMessage); // synchronous
+    var createOrderMessage = new CreateOrderMessage(
+      orderId,
+      Guid.Parse(user.Id),
+      request.ShippingAddress,
+      request.BillingAddress,
+      items,
+      request.PaymentDetails.PaymentMethodToken);
 
-    // DONE. Instead of mediator now we use message brocker, and to clear the cart the order created integration event is raised from PublishCreatedOrderIntegrationEventHandler
-    // and consumed from OrderCreatedIntegrationEventConsumer where we clear the cart
-    // this is done to achieve the full async flow because previously we got response in this handler and then cleared the card immediatelly
+    try
+    {
+      await _publishEndpoint.Publish(createOrderMessage, cancellationToken);
+    }
+    catch(Exception e)
+    {
+      Console.WriteLine(e);
+    }
 
-    await _publishEndpoint.Publish(createOrderMessage, cancellationToken);
-
-    // Old approach, checking the result and clearing the cart, now that's handled from another consumer
-    //if (!result.IsSuccess)
-    //{
-    //  // Change from a Result<OrderDetailsResponse> to Result<Guid>
-    //  return result.Map(x => x.OrderId);
-    //}
-
-    //user.ClearCart();
-    //await _userRepository.SaveChangesAsync();
-
-    // send email to customer
-    // TODO: do this in an event handler (Currently this handler is doing two things, creating order and sending email,
-    // Imagine if later you decide to send SMS, publish analytics, update loyality points, notify admins and more.
-    // DONE. it was already implemented - SendConfirmationEmailOrderCreatedEventHandler - handles OrderCreatedEvent
-
-    //var command = new SendEmailCommand()
-    //{
-    //  To = user.Email ?? "steve@test.com",
-    //  From = "noreply@test.com",
-    //  Subject = "Your RiverBooks Purchase",
-    //  Body = $"You bought {createOrderMessage.OrderItems.Count} items."
-    //};
-    //Guid emailId = await _mediator.Send(command);
-
-    return Result.Success();
+    return Result.Success(orderId);
   }
 }

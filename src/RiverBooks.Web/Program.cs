@@ -15,6 +15,7 @@ using RiverBooks.SharedKernel;
 using RiverBooks.Users;
 using RiverBooks.Users.Integrations;
 using RiverBooks.Users.UseCases.Cart.AddItem;
+using RiverBooks.PaymentProcessing;
 using Serilog;
 
 var logger = Log.Logger = new LoggerConfiguration()
@@ -47,6 +48,7 @@ builder.Services.AddEmailSendingModuleServices(builder.Configuration, logger, me
 builder.Services.AddOrderProcessingModuleServices(builder.Configuration, logger, mediatRAssemblies);
 builder.Services.AddReportingModuleServices(builder.Configuration, logger, mediatRAssemblies);
 builder.Services.AddUsersModuleServices(builder.Configuration, logger, mediatRAssemblies);
+builder.Services.AddPaymentProcessingModuleServices(builder.Configuration, logger, mediatRAssemblies);
 
 BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
@@ -69,9 +71,10 @@ builder.Services.TryAddScoped<IDomainEventDispatcher, MediatRDomainEventDispatch
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<CreateOrderConsumer>();
-    x.AddConsumer<OrderCreatedIntegrationEventConsumer>();
+    x.AddConsumer<OrderCompletedIntegrationEventConsumer>();
+    x.AddConsumer<PaymentRequestedConsumer>();
 
-    x.UsingRabbitMq((context, cfg) =>
+  x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost");
 

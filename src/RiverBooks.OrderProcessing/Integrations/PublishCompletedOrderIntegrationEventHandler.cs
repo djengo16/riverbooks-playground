@@ -5,13 +5,13 @@ using RiverBooks.OrderProcessing.Domain;
 
 namespace RiverBooks.OrderProcessing.Integrations;
 
-public class PublishCreatedOrderIntegrationEventHandler :
-  INotificationHandler<OrderCreatedEvent>
+public class PublishCompletedOrderIntegrationEventHandler :
+  INotificationHandler<OrderCompletedEvent>
 {
   private readonly IMediator _mediator;
   private readonly IPublishEndpoint _publishEndpoint;
 
-  public PublishCreatedOrderIntegrationEventHandler(
+  public PublishCompletedOrderIntegrationEventHandler(
     IMediator mediator,
     IPublishEndpoint publishEndpoint)
   {
@@ -19,7 +19,7 @@ public class PublishCreatedOrderIntegrationEventHandler :
     _publishEndpoint = publishEndpoint;
   }
 
-  public async Task Handle(OrderCreatedEvent notification, CancellationToken cancellationToken)
+  public async Task Handle(OrderCompletedEvent notification, CancellationToken cancellationToken)
   {
     var dto = new OrderDetailsDto()
     {
@@ -38,7 +38,7 @@ public class PublishCreatedOrderIntegrationEventHandler :
       .ToList()
     };
 
-    var integrationEvent = new OrderCreatedIntegrationEvent(dto);
+    var integrationEvent = new OrderCompletedIntegrationEvent(dto);
 
     await _mediator.Publish(integrationEvent, cancellationToken);
     await _publishEndpoint.Publish(integrationEvent, cancellationToken);
