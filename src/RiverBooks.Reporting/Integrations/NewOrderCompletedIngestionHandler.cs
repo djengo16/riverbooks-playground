@@ -5,14 +5,14 @@ using RiverBooks.Reporting.Interfaces;
 
 namespace RiverBooks.Reporting.Integrations;
 
-public class NewOrderCreatedIngestionHandler : INotificationHandler<OrderCreatedIntegrationEvent>
+public class NewOrderCompletedIngestionHandler : INotificationHandler<OrderCompletedIntegrationEvent>
 {
-  private readonly ILogger<NewOrderCreatedIngestionHandler> _logger;
+  private readonly ILogger<NewOrderCompletedIngestionHandler> _logger;
   private readonly OrderIngestionService _orderIngestionService;
   private readonly IBookDetailsCache _bookCache;
 
-  public NewOrderCreatedIngestionHandler(
-    ILogger<NewOrderCreatedIngestionHandler> logger,
+  public NewOrderCompletedIngestionHandler(
+    ILogger<NewOrderCompletedIngestionHandler> logger,
     OrderIngestionService orderIngestionService,
     IBookDetailsCache bookCache)
   {
@@ -21,11 +21,9 @@ public class NewOrderCreatedIngestionHandler : INotificationHandler<OrderCreated
     _bookCache = bookCache;
   }
 
-  public async Task Handle(
-    OrderCreatedIntegrationEvent notification,
-    CancellationToken ct)
+  public async Task Handle(OrderCompletedIntegrationEvent notification, CancellationToken ct)
   {
-    _logger.LogInformation("Handling order created event to populate reporting database...");
+    _logger.LogInformation("Handling order completed event to populate reporting database...");
 
     var orderItems = notification.OrderDetails.OrderItems;
     int year = notification.OrderDetails.DateCreated.Year;

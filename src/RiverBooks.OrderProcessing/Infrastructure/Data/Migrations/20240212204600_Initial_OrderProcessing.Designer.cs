@@ -31,7 +31,7 @@ namespace RiverBooks.OrderProcessing.Data.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("DateCreated")
+                    b.Property<DateTimeOffset>("DateCompleted")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("UserId")

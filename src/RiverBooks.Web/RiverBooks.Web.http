@@ -42,7 +42,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "newprice": 16.16
+  "newprice": 2.0
 }
 
 ###
@@ -75,7 +75,7 @@ Content-Type: application/json
 
 # Add Item to Cart
 
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NzkwMjg4NjQsIkVtYWlsQWRkcmVzcyI6ImR6aGVuZ29AdGVzdC5jb20iLCJleHAiOjE3NzkwMzI0NjQsIm5iZiI6MTc3OTAyODg2NH0.rXg1KhJFA6jVhvpEh--hnCW50c79fqwfGao0t80F6L4
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODAzODUxNzgsIkVtYWlsQWRkcmVzcyI6ImR6aGVuZ29AdGVzdC5jb20iLCJleHAiOjE3ODAzODg3NzgsIm5iZiI6MTc4MDM4NTE3OH0.YkwBzS14v6bqS8jOIuF7YTbyitGYLnMzlaJsmv8tVmc
 
 POST {{RiverBooks.Web_HostAddress}}/cart
 Accept: text/plain
@@ -84,7 +84,7 @@ Content-Type: application/json
 
 {
   "bookId": "17c61e41-3953-42cd-8f88-d3f698869b35",
-  "quantity": 1
+  "quantity": 5
 }
 
 ###
@@ -133,7 +133,12 @@ Content-Type: application/json
 
 {
   "shippingAddressId": "9caf85a6-686a-425c-a77f-b32590cea401",
-  "billingAddressId": "9caf85a6-686a-425c-a77f-b32590cea401"
+  "billingAddressId": "9caf85a6-686a-425c-a77f-b32590cea401",
+  "cardNumber": "4242424242424242",
+  "cardHolderName": "Test User",
+  "expirationMonth": "12",
+  "expirationYear": "34",
+  "cvv": "123"
 }
 
 ###

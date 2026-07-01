@@ -3,8 +3,10 @@ using MediatR;
 
 namespace RiverBooks.OrderProcessing.Contracts;
 
-public record CreateOrderMessage(Guid UserId,
+public record CreateOrderMessage(Guid OrderId,
+                                 Guid UserId,
                                  Guid ShippingAddressId,
                                  Guid BillingAddressId,
-                                 List<OrderItemDetails> OrderItems) :
+                                 List<OrderItemDetails> OrderItems,
+                                 string PaymentMethodToken) :
     IRequest<Result<OrderDetailsResponse>>;

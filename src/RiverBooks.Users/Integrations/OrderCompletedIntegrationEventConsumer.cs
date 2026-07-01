@@ -5,17 +5,17 @@ using RiverBooks.Users.Interfaces;
 
 namespace RiverBooks.Users.Integrations;
 
-public class OrderCreatedIntegrationEventConsumer : IConsumer<OrderCreatedIntegrationEvent>
+public class OrderCompletedIntegrationEventConsumer : IConsumer<OrderCompletedIntegrationEvent>
 {
   private readonly IApplicationUserRepository _userRepository;
-  private readonly ILogger<OrderCreatedIntegrationEventConsumer> _logger;
+  private readonly ILogger<OrderCompletedIntegrationEventConsumer> _logger;
 
-  public OrderCreatedIntegrationEventConsumer(IApplicationUserRepository userRepository, ILogger<OrderCreatedIntegrationEventConsumer> logger)
+  public OrderCompletedIntegrationEventConsumer(IApplicationUserRepository userRepository, ILogger<OrderCompletedIntegrationEventConsumer> logger)
   {
     _userRepository = userRepository;
     _logger = logger;
   }
-  public async Task Consume(ConsumeContext<OrderCreatedIntegrationEvent> context)
+  public async Task Consume(ConsumeContext<OrderCompletedIntegrationEvent> context)
   {
     var message = context.Message;
     var userId = message.OrderDetails.UserId;

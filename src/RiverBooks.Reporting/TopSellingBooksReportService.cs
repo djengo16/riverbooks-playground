@@ -24,7 +24,7 @@ select b.Id, b.Title, b.Author, sum(oi.Quantity) as Units, sum(oi.UnitPrice * oi
 from Books.Books b 
 	inner join OrderProcessing.OrderItem oi on b.Id = oi.BookId
 	inner join OrderProcessing.Orders o on o.Id = oi.OrderId
-where MONTH(o.DateCreated) = @month and YEAR(o.DateCreated) = @year
+where MONTH(o.DateCompleted) = @month and YEAR(o.DateCompleted) = @year
 group by b.Id, b.Title, b.Author
 ORDER BY Sales DESC
 ";

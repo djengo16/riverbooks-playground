@@ -2,16 +2,16 @@
 
 namespace RiverBooks.OrderProcessing.Contracts;
 
-public class OrderCreatedIntegrationEvent : INotification
+public class OrderCompletedIntegrationEvent : INotification
 {
   public DateTimeOffset DateCompleted { get; set; } = DateTimeOffset.Now;
   public OrderDetailsDto OrderDetails { get; set; } = default!;
 
-  public OrderCreatedIntegrationEvent()
+  public OrderCompletedIntegrationEvent()
   {
   }
 
-  public OrderCreatedIntegrationEvent(OrderDetailsDto orderDetailsDto)
+  public OrderCompletedIntegrationEvent(OrderDetailsDto orderDetailsDto)
   {
     OrderDetails = orderDetailsDto;
   }

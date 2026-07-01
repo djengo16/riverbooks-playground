@@ -10,11 +10,11 @@ using RiverBooks.OrderProcessing.Infrastructure.Data;
 
 #nullable disable
 
-namespace RiverBooks.OrderProcessing.Data.Migrations
+namespace RiverBooks.OrderProcessing.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(OrderProcessingDbContext))]
-    [Migration("20260503141328_OrderProcessingSyncFix")]
-    partial class OrderProcessingSyncFix
+    [Migration("20260517171800_AddStatusToOrder")]
+    partial class AddStatusToOrder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,9 @@ namespace RiverBooks.OrderProcessing.Data.Migrations
 
                     b.Property<DateTimeOffset>("DateCompleted")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
